@@ -13,16 +13,12 @@ function App() {
     "Apples"
   ];
 
-  // const userCart = [];
-
   const [cart, setCart] = useState([]);
-
-  // const count = 0;
 
   const [itemCount, setItemCount] = useState(0);
 
   const selectProducts = (listProducts) => 
-    <select>{
+    <select name="products" id='products'>{
       listProducts.map((item, index) =>
       <option key={index}>{item}</option>
          )}</select>;
@@ -30,19 +26,15 @@ function App() {
   const addItems = (event) => {
     event.preventDefault();
     const item = event.target.elements.products.value;
-    // if(cart.includes(item)) {
-    //   const items = { ... itemCount};
-    //   items.itemCount += 1;
-    //   setItemCount(items);
-    // }
-    // else {
-    //   setCart([ ... cart, item])
-    // }
-    if(cart.includes(item)){
-      setCart(item.quantity += 1);
-      let moreItems = { ... itemCount};
-      moreItems += 1;
-      setItemCount(moreItems);
+
+    const itemIndex = cart.findIndex(itemObj => itemObj.itemName === item);
+    if(itemIndex >= 0){
+    // if(cart.findIndex(item) >= 0){
+      const newCart = {...cart};
+      newCart[cart.findIndex(item)].quantity += 1;
+      // newCart[itemIndex].quantity = parseInt(newCart[itemIndex].quantity) + 1;
+      setCart(newCart);
+      setItemCount(itemCount + 1);
     }
     else {
       const newItem = {
@@ -50,42 +42,28 @@ function App() {
         quantity: 1
       };
       setCart([ ... cart, newItem]);
+      setItemCount(itemCount + 1);
     }
-
   }
-      
-  // const selectProducts = (listProducts) => {
-  //   const items = listProducts.map((item, index) => {
-  //     return <li key={index}>{item}</li>;
-  //   });
-  //   return <ul>{items}</ul>
-  // }
-
-{/* {selectProducts(products)}<input>{selectProducts(products)}</input> 
-<select><input>{selectProducts(products)}</input></select>
-        <input><select><option>{selectProducts(products)}</option></select></input>
-      <div className='cart-items'>
-        <ul>
-          <li>{products[index]}</li>
-        </ul>
-      </div>
-    onClick={addItems(event)}
-  <input id='select-product'>{selectProducts(products)}</input>*/}
 
   return (
     <>
       <h1>Shopping Cart</h1>
-      <form>
+      <form onSubmit={addItems}>
         <label htmlFor='select-product'>Products:   </label>
         {selectProducts(products)}
         <button type="submit">Add To Cart</button>
       </form>
-      {cart.quantity > 1 &&
+      {itemCount >= 1 &&
       <div className='cart-items'>
-      <ul>
-        <li>{cart.quantity === 1 ? cart.itemName : `${cart.itemName} x${cart.quantity}`}</li>
-      </ul>
-    </div>
+        <ul>
+          {cart.map((item, index) => {
+            return (
+              <li key={index}>{item.quantity === 1 ? item.itemName : `${item.itemName} x${item.quantity}`}</li>
+            )
+          })}
+        </ul>
+      </div>
       }
       <p>
         {itemCount === 0 ? "Add Some Items" : `You have ${itemCount} item(s) in your cart`}
