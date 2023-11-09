@@ -77,14 +77,16 @@ function App() {
       <h1>Shopping Cart</h1>
       <form>
         <label htmlFor='select-product'>Products:   </label>
-        <input id='select-product'>{selectProducts(products)}</input>
+        {selectProducts(products)}
         <button type="submit">Add To Cart</button>
       </form>
+      {cart.quantity > 1 &&
       <div className='cart-items'>
-        <ul>
-          <li>{cart.quantity === 1 ? cart.itemName : `${cart.itemName} x${cart.quantity}`}</li>
-        </ul>
-      </div>
+      <ul>
+        <li>{cart.quantity === 1 ? cart.itemName : `${cart.itemName} x${cart.quantity}`}</li>
+      </ul>
+    </div>
+      }
       <p>
         {itemCount === 0 ? "Add Some Items" : `You have ${itemCount} item(s) in your cart`}
       </p>
