@@ -29,10 +29,8 @@ function App() {
 
     const itemIndex = cart.findIndex(itemObj => itemObj.itemName === item);
     if(itemIndex >= 0){
-    // if(cart.findIndex(item) >= 0){
-      const newCart = {...cart};
-      newCart[cart.findIndex(item)].quantity += 1;
-      // newCart[itemIndex].quantity = parseInt(newCart[itemIndex].quantity) + 1;
+      const newCart = [...cart];
+      newCart[itemIndex].quantity += 1;
       setCart(newCart);
       setItemCount(itemCount + 1);
     }
